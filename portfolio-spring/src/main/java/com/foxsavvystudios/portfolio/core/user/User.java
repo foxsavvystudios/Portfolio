@@ -1,9 +1,6 @@
 package com.foxsavvystudios.portfolio.core.user;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,6 +20,17 @@ public class User {
 
     public Long getUserId() {
         return userId;
+    }
+
+    @PrePersist
+    private void prePersist() {
+        createdDate = LocalDateTime.now();
+        modifiedDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        modifiedDate = LocalDateTime.now()
     }
 
     public void setUserId(Long userId) {
