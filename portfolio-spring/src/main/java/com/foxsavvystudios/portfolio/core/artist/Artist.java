@@ -1,9 +1,6 @@
 package com.foxsavvystudios.portfolio.core.artist;
 
-import com.foxsavvystudios.portfolio.core.user.User;
-
 import javax.persistence.*;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 
 @Entity
