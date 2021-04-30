@@ -1,6 +1,21 @@
 package com.foxsavvystudios.portfolio.core.artist;
 
-import javax.persistence.*;
+import com.foxsavvystudios.portfolio.core.portfolio.Portfolio;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,6 +26,7 @@ public class Artist {
     private String firstName;
     private String lastName;
     private String displayName;
+    private Portfolio portfolio;
 
     private boolean active;
     private LocalDateTime createdDate;
@@ -63,6 +79,17 @@ public class Artist {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    @OneToOne
+    @Cascade({CascadeType.ALL})
+    @JoinColumn(name = "portfolio_id")
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
     @Column(name = "active")
