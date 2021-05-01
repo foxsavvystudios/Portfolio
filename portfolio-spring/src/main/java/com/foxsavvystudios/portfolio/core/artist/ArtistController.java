@@ -1,18 +1,28 @@
 package com.foxsavvystudios.portfolio.core.artist;
 
+
+import com.foxsavvystudios.portfolio.core.exception.RequestBodyNotValidException;
+import com.foxsavvystudios.portfolio.core.portfolio.Portfolio;
+import com.foxsavvystudios.portfolio.core.portfolio.PortfolioService;
+import com.foxsavvystudios.portfolio.core.exception.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/artist")
 public class ArtistController {
 
-    private ArtistRepository artistRepository;
+    private final ArtistRepository artistRepository;
+    private final PortfolioService portfolioService;
 
-    public ArtistController(@Autowired ArtistRepository artistRepository) {
+    public ArtistController(@Autowired ArtistRepository artistRepository,
+                            @Autowired PortfolioService portfolioService) {
         this.artistRepository = artistRepository;
+        this.portfolioService = portfolioService;
     }
 
     @GetMapping
@@ -46,13 +56,13 @@ public class ArtistController {
     @PostMapping("/{artistId}/portfolio")
     public Portfolio createArtistPortfolio(@PathVariable Long artistId,
                                            @RequestBody Map<String, String> body)
-            throws HttpClientErrorException, ArtistNotFoundException {
+            throws RequestBodyNotValidException, EntityNotFoundException {
         if(!body.containsKey("directory")) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "directory field is required");
+            throw new RequestBodyNotValidException("directory field is required");
         }
 
         Artist artist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new ArtistNotFoundException(artistId));
+                .orElseThrow(() -> new EntityNotFoundException(Artist.class, artistId));
 
         if(artist.getPortfolio() == null) {
             artist.setPortfolio(

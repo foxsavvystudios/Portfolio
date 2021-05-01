@@ -1,5 +1,6 @@
 package com.foxsavvystudios.portfolio.core.portfolio;
 
+import com.foxsavvystudios.portfolio.core.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,33 +27,33 @@ public class PortfolioController {
     }
 
     @GetMapping("/{portfolioId}")
-    public Portfolio getPortfolioById(@PathVariable Long portfolioId) throws PortfolioNotFoundException {
+    public Portfolio getPortfolioById(@PathVariable Long portfolioId) throws EntityNotFoundException {
         return portfolioRepository.findById(portfolioId)
-                .orElseThrow(() -> new PortfolioNotFoundException(portfolioId));
+                .orElseThrow(() -> new EntityNotFoundException(Portfolio.class, portfolioId));
     }
 
     @PostMapping("/{portfolioId}/disable")
-    public Portfolio disablePortfolio(@PathVariable Long portfolioId) throws PortfolioNotFoundException {
+    public Portfolio disablePortfolio(@PathVariable Long portfolioId) throws EntityNotFoundException {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
-                .orElseThrow(() -> new PortfolioNotFoundException(portfolioId));
+                .orElseThrow(() -> new EntityNotFoundException(Portfolio.class, portfolioId));
         portfolio.setEnabled(false);
 
         return portfolio;
     }
 
     @PostMapping("/{portfolioId}/enable")
-    public Portfolio enablePortfolio(@PathVariable Long portfolioId) throws PortfolioNotFoundException {
+    public Portfolio enablePortfolio(@PathVariable Long portfolioId) throws EntityNotFoundException {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
-                .orElseThrow(() -> new PortfolioNotFoundException(portfolioId));
+                .orElseThrow(() -> new EntityNotFoundException(Portfolio.class, portfolioId));
         portfolio.setEnabled(true);
 
         return portfolio;
     }
 
     @DeleteMapping("/{portfolioId}")
-    public void deletePortfolio(@PathVariable Long portfolioId) throws PortfolioNotFoundException {
+    public void deletePortfolio(@PathVariable Long portfolioId) throws EntityNotFoundException {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
-                .orElseThrow(() -> new PortfolioNotFoundException(portfolioId));
+                .orElseThrow(() -> new EntityNotFoundException(Portfolio.class, portfolioId));
         portfolioRepository.delete(portfolio);
     }
 }

@@ -1,5 +1,6 @@
 package com.foxsavvystudios.portfolio.core.portfolio;
 
+import com.foxsavvystudios.portfolio.core.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,33 +27,33 @@ public class PortfolioFileController {
     }
 
     @GetMapping("/{portfolioFileId}")
-    public PortfolioFile getPortfolioFileById(@PathVariable Long portfolioFileId) throws PortfolioFileNotFoundException {
+    public PortfolioFile getPortfolioFileById(@PathVariable Long portfolioFileId) throws EntityNotFoundException {
         return portfolioFileRepository.findById(portfolioFileId)
-                .orElseThrow(() -> new PortfolioFileNotFoundException(portfolioFileId));
+                .orElseThrow(() -> new EntityNotFoundException(PortfolioFile.class, portfolioFileId));
     }
 
     @PostMapping("/{portfolioFileId}/include")
-    public PortfolioFile disablePortfolioFile(@PathVariable Long portfolioFileId) throws PortfolioFileNotFoundException {
+    public PortfolioFile disablePortfolioFile(@PathVariable Long portfolioFileId) throws EntityNotFoundException {
         PortfolioFile portfolioFile = portfolioFileRepository.findById(portfolioFileId)
-                .orElseThrow(() -> new PortfolioFileNotFoundException(portfolioFileId));
+                .orElseThrow(() -> new EntityNotFoundException(PortfolioFile.class, portfolioFileId));
         portfolioFile.setInclude(true);
 
         return portfolioFile;
     }
 
     @PostMapping("/{portfolioFileId}/ignore")
-    public PortfolioFile enablePortfolioFile(@PathVariable Long portfolioFileId) throws PortfolioFileNotFoundException {
+    public PortfolioFile enablePortfolioFile(@PathVariable Long portfolioFileId) throws EntityNotFoundException {
         PortfolioFile portfolioFile = portfolioFileRepository.findById(portfolioFileId)
-                .orElseThrow(() -> new PortfolioFileNotFoundException(portfolioFileId));
+                .orElseThrow(() -> new EntityNotFoundException(PortfolioFile.class, portfolioFileId));
         portfolioFile.setInclude(false);
 
         return portfolioFile;
     }
 
     @DeleteMapping("/{portfolioFileId}")
-    public void deletePortfolioFile(@PathVariable Long portfolioFileId) throws PortfolioFileNotFoundException {
+    public void deletePortfolioFile(@PathVariable Long portfolioFileId) throws EntityNotFoundException {
         PortfolioFile portfolioFile = portfolioFileRepository.findById(portfolioFileId)
-                .orElseThrow(() -> new PortfolioFileNotFoundException(portfolioFileId));
+                .orElseThrow(() -> new EntityNotFoundException(PortfolioFile.class, portfolioFileId));
         portfolioFileRepository.delete(portfolioFile);
     }
 }

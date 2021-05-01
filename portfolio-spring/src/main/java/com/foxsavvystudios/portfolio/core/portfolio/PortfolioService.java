@@ -1,6 +1,8 @@
 package com.foxsavvystudios.portfolio.core.portfolio;
 
 import com.foxsavvystudios.portfolio.config.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,13 +19,16 @@ import java.util.stream.Stream;
 @Service
 public class PortfolioService {
 
-    private AppConfig appConfig;
-    private PortfolioRepository portfolioRepository;
-    private PortfolioFileRepository portfolioFileRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioService.class);
 
-    public PortfolioService(AppConfig appConfig, PortfolioRepository portfolioRepository, PortfolioFileRepository portfolioFileRepository) {
+    private static final String INVALID_DIRECTORY_MESSAGE_TEMPLATE = "%s is not a valid directory";
+
+    private final AppConfig appConfig;
+    private final PortfolioFileRepository portfolioFileRepository;
+
+    public PortfolioService(@Autowired AppConfig appConfig,
+                            @Autowired PortfolioFileRepository portfolioFileRepository) {
         this.appConfig = appConfig;
-        this.portfolioRepository = portfolioRepository;
         this.portfolioFileRepository = portfolioFileRepository;
     }
 
@@ -35,10 +39,8 @@ public class PortfolioService {
             portfolio.setEnabled(true);
             portfolio.setDirectory(directory);
         } catch (Exception e) {
-            e.printStackTrace();
-            // TODO: handle exception
+            LOGGER.error(e.getMessage(), e);
         }
-//        portfolioRepository.save(portfolio);
 
         return portfolio;
     }
@@ -52,25 +54,24 @@ public class PortfolioService {
             portfolio.setFiles(portfolioFiles);
             portfolio.setDirectory(directory);
         } catch (Exception e) {
-            // TODO: handle exception
+            LOGGER.error(e.getMessage(), e);
         }
-//        portfolioRepository.save(portfolio);
 
         return portfolio;
     }
 
     private List<PortfolioFile> scanDirectoryForImageFiles(String directory) throws IOException {
-        List<PortfolioFile> portfolioFiles = new ArrayList<>();
+        List<PortfolioFile> portfolioFiles;
 
         if(Files.isDirectory(Paths.get(directory))) {
             try (Stream<Path> stream = Files.walk(Paths.get(directory), 1)) {
                 portfolioFiles = stream
-                        .filter(file -> isSupportedImage(file))
+                        .filter(this::isSupportedImage)
                         .map(file -> new PortfolioFile(file.toAbsolutePath().toString(), true))
                         .collect(Collectors.toList());
             }
         } else {
-            throw new NotDirectoryException(directory);
+            throw new NotDirectoryException(String.format(INVALID_DIRECTORY_MESSAGE_TEMPLATE, directory));
         }
 
         return portfolioFiles;
