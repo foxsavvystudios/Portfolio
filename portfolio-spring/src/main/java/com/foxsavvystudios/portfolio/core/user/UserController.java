@@ -1,5 +1,6 @@
 package com.foxsavvystudios.portfolio.core.user;
 
+import com.foxsavvystudios.portfolio.core.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,20 +27,20 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable Long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    public User getUserById(@PathVariable Long userId) throws EntityNotFoundException {
+        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(User.class, userId));
     }
 
     @PutMapping("/{userId}")
-    public User editUser(@RequestBody User newUser, @PathVariable Long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    public User editUser(@RequestBody User newUser, @PathVariable Long userId) throws EntityNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(User.class, userId));
         newUser.setUserId(user.getUserId());
         return userRepository.save(newUser);
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    public void deleteUser(@PathVariable Long userId) throws EntityNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(User.class, userId));
         userRepository.delete(user);
     }
 }

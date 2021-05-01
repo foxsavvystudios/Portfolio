@@ -1,5 +1,6 @@
 package com.foxsavvystudios.portfolio.core.artist;
 
+import com.foxsavvystudios.portfolio.core.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,20 +27,20 @@ public class ArtistController {
     }
 
     @GetMapping("/{artistId}")
-    public Artist getArtistById(@PathVariable Long artistId) throws ArtistNotFoundException {
-        return artistRepository.findById(artistId).orElseThrow(() -> new ArtistNotFoundException(artistId));
+    public Artist getArtistById(@PathVariable Long artistId) throws EntityNotFoundException {
+        return artistRepository.findById(artistId).orElseThrow(() -> new EntityNotFoundException(Artist.class, artistId));
     }
 
     @PutMapping("/{artistId}")
-    public Artist editArtist(@RequestBody Artist newArtist, @PathVariable Long artistId) throws ArtistNotFoundException {
-        Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new ArtistNotFoundException(artistId));
+    public Artist editArtist(@RequestBody Artist newArtist, @PathVariable Long artistId) throws EntityNotFoundException {
+        Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new EntityNotFoundException(Artist.class, artistId));
         newArtist.setArtistId(artist.getArtistId());
         return artistRepository.save(newArtist);
     }
 
     @DeleteMapping("/{artistId}")
-    public void deleteArtist(@PathVariable Long artistId) throws ArtistNotFoundException {
-        Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new ArtistNotFoundException(artistId));
+    public void deleteArtist(@PathVariable Long artistId) throws EntityNotFoundException {
+        Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new EntityNotFoundException(Artist.class, artistId));
         artistRepository.delete(artist);
     }
 }
