@@ -21,15 +21,6 @@ public class User {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    @PrePersist
-    private void prePersist() {
-        createdDate = LocalDateTime.now();
-        modifiedDate = LocalDateTime.now();
-        if(role == null) {
-            role = Role.USER;
-        }
-    }
-
     public User() {
     }
 
@@ -39,6 +30,15 @@ public class User {
         this.email = email;
         this.role = role;
         this.enabled = enabled;
+    }
+
+    @PrePersist
+    private void prePersist() {
+        createdDate = LocalDateTime.now();
+        modifiedDate = LocalDateTime.now();
+        if(role == null) {
+            role = Role.USER;
+        }
     }
 
     @PreUpdate
