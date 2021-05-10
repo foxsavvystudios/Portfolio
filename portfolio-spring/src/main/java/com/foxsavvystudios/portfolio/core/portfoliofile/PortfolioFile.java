@@ -1,4 +1,4 @@
-package com.foxsavvystudios.portfolio.core.portfolio;
+package com.foxsavvystudios.portfolio.core.portfoliofile;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Table
 public class PortfolioFile {
 
-    private Long portfolioField;
+    private Long portfolioFileId;
     private String title;
     private String description;
     private String filepath;
@@ -26,9 +26,9 @@ public class PortfolioFile {
 
     }
 
-    public PortfolioFile(Long portfolioField, String title, String description, String filepath, boolean include){
+    public PortfolioFile(Long portfolioFileId, String title, String description, String filepath, boolean include){
 
-        this.portfolioField = portfolioField;
+        this.portfolioFileId = portfolioFileId;
         this.title = title;
         this.description = description;
         this.filepath = filepath;
@@ -41,13 +41,13 @@ public class PortfolioFile {
 
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "portfolio_field")
-    public Long getPortfolioField() {
-        return portfolioField;
+    @Column(name = "portfolio_file_id")
+    public Long getPortfolioFileId() {
+        return portfolioFileId;
     }
 
-    public void setPortfolioField(Long portfolioField) {
-        this.portfolioField = portfolioField;
+    public void setPortfolioFileId(Long portfolioFileId) {
+        this.portfolioFileId = portfolioFileId;
     }
 
     @Column(name = "title")
