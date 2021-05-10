@@ -1,5 +1,7 @@
 package com.foxsavvystudios.portfolio.core.artist;
 
+import com.foxsavvystudios.portfolio.core.portfolio.Portfolio;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,6 +13,8 @@ public class Artist {
     private String firstName;
     private String lastName;
     private String displayName;
+    private Portfolio portfolio;
+
 
     private boolean active;
     private LocalDateTime createdDate;
@@ -91,4 +95,14 @@ public class Artist {
     public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
+
+    @Column(name = "portfolio")
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
+
 }
