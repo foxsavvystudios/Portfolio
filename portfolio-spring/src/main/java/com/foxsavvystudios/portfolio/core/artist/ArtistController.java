@@ -43,4 +43,7 @@ public class ArtistController {
         Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new EntityNotFoundException(Artist.class, artistId));
         artistRepository.delete(artist);
     }
+
+    @PostMapping("/{artistId}/portfolio")
+    public
 }
