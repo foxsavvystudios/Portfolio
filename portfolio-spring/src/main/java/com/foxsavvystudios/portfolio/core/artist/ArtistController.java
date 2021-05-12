@@ -44,6 +44,6 @@ public class ArtistController {
         artistRepository.delete(artist);
     }
 
-    @PostMapping("/{artistId}/portfolio")
-    public
+   // @PostMapping("/{artistId}/portfolio")
+   // public
 }
