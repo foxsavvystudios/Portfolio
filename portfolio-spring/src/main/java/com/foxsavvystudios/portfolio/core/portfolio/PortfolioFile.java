@@ -26,11 +26,9 @@ public class PortfolioFile {
 
     }
 
-    public PortfolioFile(Long portfolioFileId, String title, String description, String filepath, boolean include){
+    public PortfolioFile(String filepath, boolean include){
 
-        this.portfolioFileId = portfolioFileId;
-        this.title = title;
-        this.description = description;
+       
         this.filepath = filepath;
         this.include = include;
 
