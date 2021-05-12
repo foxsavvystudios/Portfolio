@@ -28,7 +28,7 @@ public class PortfolioFile {
 
     public PortfolioFile(String filepath, boolean include){
 
-       
+
         this.filepath = filepath;
         this.include = include;
 
