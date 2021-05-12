@@ -37,5 +37,5 @@ out/
 .vscode/
 
 ## Project specific
-*.dev.yaml
-*.dev.properties
+*dev.yaml
+*dev.properties
