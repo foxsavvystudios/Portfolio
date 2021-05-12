@@ -1,10 +1,10 @@
-package com.foxsavvystudios.portfolio.core.portfoliofile;
+package com.foxsavvystudios.portfolio.core.portfolio;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name="portfolio_file")
 public class PortfolioFile {
 
     private Long portfolioFileId;

@@ -1,7 +1,5 @@
 package com.foxsavvystudios.portfolio.core.portfolio;
 
-import com.foxsavvystudios.portfolio.core.portfoliofile.PortfolioFile;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
