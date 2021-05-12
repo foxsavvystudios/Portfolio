@@ -4,6 +4,8 @@ package com.foxsavvystudios.portfolio.core.portfolio;
 import com.foxsavvystudios.portfolio.core.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,20 +13,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class PortfolioService {
 
-    private PortfolioRepository portfolioRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioService.class)
+    private PortfolioFileRepository portfolioFileRepository;
 
 
     private static final String MESSAGE_TEMPLATE = "%s is not a valid directory!";
 
-    public PortfolioService(@Autowired PortfolioRepository portfolioRepository){
-        this.portfolioRepository = portfolioRepository;
+    public PortfolioService(@Autowired PortfolioFileRepository portfolioFileRepository){
+        this.portfolioFileRepository = portfolioFileRepository;
     }
 
     public Portfolio createPortfolioFromDirectory(String directory) {
@@ -35,7 +37,7 @@ public class PortfolioService {
             portfolio.setFiles(scanDirectoryFiles(directory));
             portfolio.setEnabled(true);
         } catch (Exception e) {
-            Logger.getLogger(e.getMessage());
+            Logger.error(e.getMessage());
         }
 
         return portfolioRepository.save(portfolio);
