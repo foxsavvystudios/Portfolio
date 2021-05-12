@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { loginUser } from '../../actions/auth'
-import tattooPic from '../../hero__4__jpg-600x390.jpg'
+import tattooPic from '../../images/hero__4__jpg-600x390.jpg'
 import { NavLink } from 'react-router-dom'
 
 

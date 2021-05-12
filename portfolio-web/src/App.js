@@ -5,7 +5,7 @@ import {
   Route
 } from 'react-router-dom'
 import Home from './components/Home'
-import Navbar from './components/Navbar'
+import Artist from './components/Artist'
 import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
 import Logout from './components/auth/Logout'
@@ -20,6 +20,12 @@ function App() {
               exact
               path='/'
               component={Home}
+            />
+
+            <Route
+              exact
+              path='/artist'
+              component={Artist}
             />
 
             <Route

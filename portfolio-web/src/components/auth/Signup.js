@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { signupUser } from '../../actions/auth'
 import { NavLink } from 'react-router-dom'
-import tattooPic from '../../hero__4__jpg-600x390.jpg'
+import tattooPic from '../../images/hero__4__jpg-600x390.jpg'
 
 
 class Signup extends React.Component {
