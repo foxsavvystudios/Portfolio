@@ -1,15 +1,14 @@
 package com.foxsavvystudios.portfolio.core.portfolio;
 
-
-
 import com.foxsavvystudios.portfolio.config.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -23,14 +22,13 @@ public class PortfolioService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioService.class);
 
-    private PortfolioFileRepository portfolioFileRepository;
-    private AppConfig appConfig;
+    private static final String MESSAGE_TEMPLATE = "%s is not a valid directory";
 
-    private static final String MESSAGE_TEMPLATE = "%s is not a valid directory!";
+    private final AppConfig appConfig;
+    private final PortfolioFileRepository portfolioFileRepository;
 
     public PortfolioService(@Autowired AppConfig appConfig,
-                            @Autowired PortfolioFileRepository portfolioFileRepository){
-
+                            @Autowired PortfolioFileRepository portfolioFileRepository) {
         this.appConfig = appConfig;
         this.portfolioFileRepository = portfolioFileRepository;
     }
@@ -63,34 +61,34 @@ public class PortfolioService {
         return portfolio;
     }
 
-    private List <PortfolioFile> scanDirectoryFiles(String directory) throws IOException, PortfolioException {
+    private List<PortfolioFile> scanDirectoryFiles(String directory) throws IOException {
         List<PortfolioFile> portfolioFiles;
 
-        if (Files.isDirectory(Paths.get(directory))) {
+        if(Files.isDirectory(Paths.get(directory))) {
             try (Stream<Path> stream = Files.walk(Paths.get(directory), 1)) {
                 portfolioFiles = stream
-                                .filter(this::isApprovedImage)
-                                .map(file -> new PortfolioFile(file.toAbsolutePath().toString(), true))
-                                .collect(Collectors.toList());
+                        .filter(this::isSupportedImage)
+                        .map(file -> new PortfolioFile(file.toAbsolutePath().toString(), true))
+                        .collect(Collectors.toList());
             }
         } else {
-            throw new PortfolioException(String.format(MESSAGE_TEMPLATE, directory));
+            throw new NotDirectoryException(String.format(MESSAGE_TEMPLATE, directory));
         }
 
         return portfolioFiles;
     }
 
-    private boolean isApprovedImage(Path file){
-        Set<String> approvedExtensions = appConfig.getApprovedImageFileExtensions();
-        boolean approved = false;
+    private boolean isSupportedImage(Path file){
+        Set<String> supportedExtensions = appConfig.getSupportedImageFileExtensions();
+        boolean supported = false;
 
-        for(String extens: approvedExtensions){
+        for(String extens: supportedExtensions){
             if(file.toString().endsWith(extens)){
-                approved = true;
+                supported = true;
                 break;
             }
         }
 
-        return approved;
+        return supported;
     }
 }

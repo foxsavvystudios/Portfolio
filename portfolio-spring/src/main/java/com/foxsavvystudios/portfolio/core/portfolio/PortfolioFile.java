@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="portfolio_file")
+@Table(name = "portfolio_file")
 public class PortfolioFile {
 
     private Long portfolioFileId;
@@ -16,28 +16,26 @@ public class PortfolioFile {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
+    public PortfolioFile() {
+    }
+
+    public PortfolioFile(String filepath, boolean include) {
+        this.filepath = filepath;
+        this.include = include;
+    }
+
     @PrePersist
-    private void prePersist(){
+    private void prePersist() {
         createdDate = LocalDateTime.now();
         modifiedDate = LocalDateTime.now();
     }
 
-    public PortfolioFile(){
-
-    }
-
-    public PortfolioFile(String filepath, boolean include){
-
-
-        this.filepath = filepath;
-        this.include = include;
-
-    }
-
     @PreUpdate
-    private void preUpdate() { modifiedDate = LocalDateTime.now(); }
+    private void preUpdate() {
+        modifiedDate = LocalDateTime.now();
+    }
 
-
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "portfolio_file_id")
     public Long getPortfolioFileId() {
@@ -102,5 +100,3 @@ public class PortfolioFile {
         this.modifiedDate = modifiedDate;
     }
 }
-
-

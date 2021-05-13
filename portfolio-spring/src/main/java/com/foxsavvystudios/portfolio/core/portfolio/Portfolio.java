@@ -1,11 +1,23 @@
 package com.foxsavvystudios.portfolio.core.portfolio;
 
-import javax.persistence.*;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "portfolio")
 public class Portfolio {
 
     private Long portfolioId;
@@ -17,20 +29,9 @@ public class Portfolio {
     private LocalDateTime modifiedDate;
 
     @PrePersist
-    private void prePersist(){
+    private void prePersist() {
         createdDate = LocalDateTime.now();
         modifiedDate = LocalDateTime.now();
-    }
-
-    public Portfolio(){
-
-    }
-
-    public Portfolio(Long portfolioId, String directory, List<PortfolioFile> files){
-
-        this.portfolioId = portfolioId;
-        this.directory = directory;
-        this.files = files;
     }
 
     @PreUpdate
@@ -56,13 +57,18 @@ public class Portfolio {
         this.directory = directory;
     }
 
-    @Column(name = "files")
+    @OneToMany
+    @Cascade({CascadeType.ALL})
     public List<PortfolioFile> getFiles() {
         return files;
     }
 
     public void setFiles(List<PortfolioFile> files) {
         this.files = files;
+    }
+
+    public void addFile(PortfolioFile file) {
+        this.files.add(file);
     }
 
     @Column(name = "enabled")
