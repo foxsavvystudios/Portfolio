@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom'
 import Home from './components/Home'
 import Artist from './components/Artist'
+import Navbar from './components/Navbar'
 import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
 import Logout from './components/auth/Logout'

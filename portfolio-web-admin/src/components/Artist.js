@@ -6,10 +6,16 @@ class Artist extends React.Component {
 
     state = {
         open: false,
-        modalType: ''
+        modalType: '',
+        artists: [{
+            first_name: '',
+            last_name: '',
+            display_name: '',
+            enabled: false
+        }]
     }
 
-    handleClick = (event) => {
+    handleModal = (event) => {
         event.preventDefault();
 
     
@@ -34,7 +40,47 @@ class Artist extends React.Component {
         }
     }
 
+    handleEnable = (event) => {
+        event.preventDefault();
+        debugger
+        if(event.currentTarget.value){
+            this.setState(prevState => ({
+                ...prevState,
+                artists:{
+                    ...prevState.artists, 
+                enabled: false}
+            }))
+        }else {
+            this.setState(prevState => ({
+                ...prevState,
+                artists:[{
+                    ...prevState.artists, 
+                enabled: true}
+            ]
+            }))
+        }
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault()
+        debugger
+        this.setState({
+            artists:[
+                ...this.state.artists,
+                { 
+                    first_name: event.target.first_name.value,
+                    last_name: event.target.last_name.value,
+                    display_name: event.target.display_name.value,
+                    enabled: event.target.enabled.checked
+                }],
+                open: false
+
+        })
+    }
+
+
     render() {
+        debugger
         return(
             <div class='flex min-h-screen'>
                 <Navbar />
@@ -48,7 +94,7 @@ class Artist extends React.Component {
                     <div class="relative overflow-x-auto">
                         <div class="min-w-screen min-h-screen bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-hidden">
                             <div class="w-full lg:w-5/6">
-                                <button id='open' onClick={this.handleClick} class="add-modal bg-blue-300 text-white font-bold py-2 px-4 border-b-4 hover:border-b-2 hover:border-t-2 border-blue-500 hover:border-blue-300 rounded">
+                                <button id='open' onClick={this.handleModal} class="add-modal bg-blue-300 text-white font-bold py-2 px-4 border-b-4 hover:border-b-2 hover:border-t-2 border-blue-500 hover:border-blue-300 rounded">
                                     Add Artist
                                 </button>
                                 <div class="bg-white shadow-md rounded my-6">
@@ -63,6 +109,7 @@ class Artist extends React.Component {
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 text-sm font-light">
+                                            {this.state.artists.map(artist => 
                                             <tr class="border-b border-gray-200 hover:bg-gray-100">
                                                 <td class="py-3 px-6 whitespace-nowrap">
                                                     <div class="flex justify-center">
@@ -76,7 +123,7 @@ class Artist extends React.Component {
                                                         <div class="mr-2">
                                                             <img class="w-6 h-6 rounded-full" src="https://randomuser.me/api/portraits/men/1.jpg"/>
                                                         </div>
-                                                        <span>Eshal Rosas</span>
+                                                        <span>{artist.first_name + ' ' + artist.last_name}</span>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
@@ -87,7 +134,13 @@ class Artist extends React.Component {
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
-                                                    <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs">Active</span>
+                                                {artist.enabled ? (
+                                                        <button onClick={this.handleEnable} type="button" value={artist.enabled} className="focus:outline-none">
+                                                            <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs">Enabled</span>
+                                                        </button>) : (
+                                                        <button onClick={this.handleEnable} type="button" value={artist.enabled} className='focus:outline-none' >
+                                                            <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Disabled</span>
+                                                        </button>)}
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
                                                     <div class="flex item-center justify-center">
@@ -109,7 +162,7 @@ class Artist extends React.Component {
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr>)}
                                             <tr class="border-b border-gray-200 bg-gray-50 hover:bg-gray-100">
                                                 <td class="py-3 px-6">
                                                     <div class="flex justify-center">
@@ -134,7 +187,13 @@ class Artist extends React.Component {
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
-                                                    <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Completed</span>
+                                                    {this.state.enabled ? (
+                                                        <button onClick={() => this.setState({enabled: false})} type="button" className="focus:outline-none">
+                                                            <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs">Enabled</span>
+                                                        </button>) : (
+                                                        <button onClick={() => this.setState({enabled: true})} type="button" className='focus:outline-none' >
+                                                            <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Disabled</span>
+                                                        </button>)}
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
                                                     <div class="flex item-center justify-center">
@@ -181,7 +240,7 @@ class Artist extends React.Component {
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
-                                                    <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">Scheduled</span>
+                                                    <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs">Enabled</span>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
                                                     <div class="flex item-center justify-center">
@@ -241,14 +300,14 @@ class Artist extends React.Component {
                                             <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="first_name">
                                                 First Name
                                             </label>
-                                            <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="first_name" name='first_name' type="text" placeholder="Jane" />
+                                            <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="first_name" name='first_name' value={this.state.artists.first_name} type="text" placeholder="Jane" />
                                             <p class="text-red text-xs italic">Please fill out this field.</p>
                                         </div>
                                         <div class="md:w-1/2 px-3">
                                             <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="last_name">
                                                 Last Name
                                             </label>
-                                            <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="last_name" name='last_name' type="text" placeholder="Doe" />
+                                            <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="last_name" name='last_name' value={this.state.artists.last_name} type="text" placeholder="Doe" />
                                         </div>
                                     </div>
                                     <div class="-mx-3 md:flex mb-6">
@@ -256,8 +315,16 @@ class Artist extends React.Component {
                                             <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="display_name">
                                                 Display Name
                                             </label>
-                                            <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" id="display_name" name='display_name' type="text" placeholder="tatguy187" />
+                                            <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" id="display_name" name='display_name' value={this.state.artists.display_name} type="text" placeholder="tatguy187" />
                                             <p class="text-grey-dark text-xs italic">Make it as long and as crazy as you'd like</p>
+                                        </div>
+                                    </div>
+                                    <div class="-mx-3 md:flex mb-6">
+                                        <div class="md:w-full px-3">
+                                            <input type="checkbox" class="form-checkbox h-3 w-3 text-blue-600" id='enabled' name='enabled'/>
+                                            <label class="p-2">
+                                                Enabled
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="py-3 center mx-auto">
@@ -272,7 +339,7 @@ class Artist extends React.Component {
                                         </div>
                                     </div>
                                     <div class='mt-2'>
-                                        <button id='close' onClick={this.handleClick}
+                                        <button id='close' onClick={this.handleModal}
                                             class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300">Cancel</button>
                                         <button type='submit'
                                             class="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400">{this.state.modalType}</button>
