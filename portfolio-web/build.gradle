@@ -1,0 +1,28 @@
+plugins {
+	id "com.moowork.node" version "1.2.0"
+}
+
+apply plugin: 'base'
+apply plugin: "com.moowork.node"
+
+node {
+	version = "12.22.0"
+	download = false
+}
+
+task bundle(type: NpmTask, dependsOn: npmInstall) {
+	args = ['run', 'build']
+}
+
+//task test(type: NpmTask) {
+//	environment = ['CI': 'true']
+//	args = ['run', 'test']
+//}
+
+task run(type: NpmTask) {
+	args = ['start']
+}
+
+
+//check.dependsOn(test)
+assemble.dependsOn(bundle)

@@ -1,4 +1,4 @@
 rootProject.name = "Portfolio"
 
 include "portfolio-spring"
-//include "portfolio-web"
+include "portfolio-web"
